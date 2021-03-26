@@ -6,6 +6,16 @@ namespace Bari.Test.Job.Domain.Entities
 {
     public class Message : Entity
     {
+        public Message()
+        {
+
+        }
+        public Message(string body, string serviceId) : base()
+        {
+            Body = body;
+            ServiceId = serviceId;
+        }
+
         public string Body { get; set; }
 
         public double Timestamp { get { return (double)((TimeSpan)(CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime())).TotalSeconds; } }
