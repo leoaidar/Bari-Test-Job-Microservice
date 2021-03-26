@@ -2,7 +2,7 @@ using Bari.Test.Job.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace Bari.Test.Job.Tests.EntityTests
+namespace Bari.Test.Job.Tests.EntitiesTests
 {
     [TestClass]
     public class MessageTest
