@@ -10,6 +10,8 @@ namespace Bari.Test.Job.Domain.Entities
 
         public double Timestamp { get { return (double)((TimeSpan)(CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime())).TotalSeconds; } }
 
+        public string ServiceId { get; set; }
+
         public override void Validate()
         {
             if (string.IsNullOrEmpty(Body?.Trim()))
