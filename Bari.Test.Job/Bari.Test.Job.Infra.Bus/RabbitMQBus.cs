@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using Bari.Test.Job.Domain.Events.Bus.MQ;
+using Bari.Test.Job.Domain.Events.Bus.MQ.Commands;
+using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -7,12 +10,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 
-namespace Wooza.Gateway.Tim.Infra.Bus
+namespace Bari.Test.Job.Infra.Bus
 {
     public sealed class RabbitMQBus : IEventBus
     {
