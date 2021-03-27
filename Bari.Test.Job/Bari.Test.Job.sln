@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bari.Test.Job.Domain", "Bari.Test.Job.Domain\Bari.Test.Job.Domain.csproj", "{4A454BFF-6744-43C4-8494-11D4D9FBDBA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bari.Test.Job.Domain", "Bari.Test.Job.Domain\Bari.Test.Job.Domain.csproj", "{4A454BFF-6744-43C4-8494-11D4D9FBDBA5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Domain", "2 - Domain", "{112C9B2F-F9F2-4502-ADF0-7A491709509D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Tests", "4 - Tests", "{DE40F790-7516-4CE2-82B1-C9A419C0BF6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bari.Test.Job.Tests", "Bari.Test.Job.Tests\Bari.Test.Job.Tests.csproj", "{8F08B2CA-C9C6-434B-BCA7-777F600FA700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bari.Test.Job.Tests", "Bari.Test.Job.Tests\Bari.Test.Job.Tests.csproj", "{8F08B2CA-C9C6-434B-BCA7-777F600FA700}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - Application", "1 - Application", "{45945C7C-E5B0-4C04-A000-0123E096EB84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bari.Test.Job.Application", "Bari.Test.Job.Application\Bari.Test.Job.Application.csproj", "{2EA9FFAC-13FC-44B8-A48B-5A2FEB5B1748}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Infra", "3 - Infra", "{2F0AB301-962F-4500-9BA6-F8A270243865}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +31,10 @@ Global
 		{8F08B2CA-C9C6-434B-BCA7-777F600FA700}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F08B2CA-C9C6-434B-BCA7-777F600FA700}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F08B2CA-C9C6-434B-BCA7-777F600FA700}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EA9FFAC-13FC-44B8-A48B-5A2FEB5B1748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EA9FFAC-13FC-44B8-A48B-5A2FEB5B1748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EA9FFAC-13FC-44B8-A48B-5A2FEB5B1748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EA9FFAC-13FC-44B8-A48B-5A2FEB5B1748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +42,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{4A454BFF-6744-43C4-8494-11D4D9FBDBA5} = {112C9B2F-F9F2-4502-ADF0-7A491709509D}
 		{8F08B2CA-C9C6-434B-BCA7-777F600FA700} = {DE40F790-7516-4CE2-82B1-C9A419C0BF6D}
+		{2EA9FFAC-13FC-44B8-A48B-5A2FEB5B1748} = {45945C7C-E5B0-4C04-A000-0123E096EB84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C6373A19-A0F9-4CD6-9A03-363985AD7E9A}
