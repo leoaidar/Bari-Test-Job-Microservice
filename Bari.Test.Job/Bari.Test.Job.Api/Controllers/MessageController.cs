@@ -14,7 +14,7 @@ using Bari.Test.Job.Application.ViewModels;
 using MediatR;
 using Bari.Test.Job.Domain.Queries;
 
-namespace Wooza.Gateway.Tim.Controllers
+namespace Bari.Test.Job.Controllers
 {
     [ApiController]
     [Route("v1/messages")]

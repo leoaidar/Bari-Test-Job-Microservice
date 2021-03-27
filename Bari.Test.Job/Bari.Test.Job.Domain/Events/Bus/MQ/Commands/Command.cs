@@ -1,9 +1,7 @@
-﻿using Bari.Test.Job.Domain.Events.Bus.Events;
+﻿using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Bari.Test.Job.Domain.Events.Bus.Commands
+namespace Bari.Test.Job.Domain.Events.Bus.MQ.Commands
 {
     public abstract class Command : Message
     {

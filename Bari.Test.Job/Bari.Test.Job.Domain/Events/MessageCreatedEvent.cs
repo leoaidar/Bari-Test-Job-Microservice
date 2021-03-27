@@ -1,4 +1,4 @@
-﻿using Bari.Test.Job.Domain.Events.Bus.Events;
+﻿using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
 using System;
 
 namespace Bari.Test.Job.Domain.Events

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Bari.Test.Job.Domain.Events.Bus.Events
+namespace Bari.Test.Job.Domain.Events.Bus.MQ.Events
 {
     public abstract class Event
     {

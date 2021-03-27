@@ -3,7 +3,7 @@ using Bari.Test.Job.Application.Interfaces;
 using Bari.Test.Job.Application.ViewModels;
 using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Events;
-using Bari.Test.Job.Domain.Events.Bus;
+using Bari.Test.Job.Domain.Events.Bus.MQ;
 using Bari.Test.Job.Domain.Queries;
 using Bari.Test.Job.Domain.Repositories;
 using MediatR;

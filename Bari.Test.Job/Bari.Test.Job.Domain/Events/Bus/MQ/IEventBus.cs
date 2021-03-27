@@ -1,11 +1,11 @@
-﻿using Bari.Test.Job.Domain.Events.Bus.Commands;
-using Bari.Test.Job.Domain.Events.Bus.Events;
+﻿using Bari.Test.Job.Domain.Events.Bus.MQ.Commands;
+using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bari.Test.Job.Domain.Events.Bus
+namespace Bari.Test.Job.Domain.Events.Bus.MQ
 {
     public interface IEventBus
     {

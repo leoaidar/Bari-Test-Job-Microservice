@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Bari.Test.Job.Domain.Events.Bus.Events
+namespace Bari.Test.Job.Domain.Events.Bus.MQ.Events
 {
     public class Message : IRequest<bool>
     {
