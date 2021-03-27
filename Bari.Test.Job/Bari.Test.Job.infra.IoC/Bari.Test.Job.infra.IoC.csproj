@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Bari.Test.Job.Application\Bari.Test.Job.Application.csproj" />
+    <ProjectReference Include="..\Bari.Test.Job.Domain\Bari.Test.Job.Domain.csproj" />
+    <ProjectReference Include="..\Bari.Test.Job.Infra.Bus\Bari.Test.Job.Infra.Bus.csproj" />
+  </ItemGroup>
+
+</Project>
