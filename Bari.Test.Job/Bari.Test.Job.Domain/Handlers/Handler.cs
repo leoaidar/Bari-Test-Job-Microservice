@@ -1,10 +1,6 @@
 ﻿using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Repositories;
 using Flunt.Notifications;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Domain.Handlers
 {
