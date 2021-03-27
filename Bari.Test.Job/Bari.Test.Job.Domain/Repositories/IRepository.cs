@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace Bari.Test.Job.Domain.Repositories
     {
         public Task<IEnumerable<T>> GetAll();
 
-        public Task<T> Get(int id);
+        public Task<T> Get(Guid id);
 
         public Task<R> GetBy<K,R>(K key);
 
@@ -15,7 +16,7 @@ namespace Bari.Test.Job.Domain.Repositories
 
         public Task Update(T item);
 
-        public Task Delete(int id);
+        public Task Delete(Guid id);
 
         public Task Bind<Y>(Y entities, string named = null);
     }

@@ -46,7 +46,7 @@ namespace Bari.Test.Job.Infra.Bus
                 channel.QueueDeclare(eventName, false, false, false, null);
 
                 //old using NewtonJson cause this had a bug JsonSerializer version doesnt support constructor with parameter yet :(
-                //{"Deserialization of reference types without parameterless constructor is not supported. Type 'Wooza.Gateway.Tim.Domain.Events.TransferCreatedEvent'"}
+                //{"Deserialization of reference types without parameterless constructor is not supported. Type 'Bari.Test.Job.Domain.Events.TransferCreatedEvent'"}
                 //var message = JsonSerializer.Serialize(@event);
                 var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
@@ -133,7 +133,7 @@ namespace Bari.Test.Job.Infra.Bus
                         if (handler == null) continue;
                         var eventType = _eventTypes.SingleOrDefault(t => t.Name == eventName);
                         //old using NewtonJson cause this had a bug JsonSerializer version doesnt support constructor with parameter yet :(
-                        //{"Deserialization of reference types without parameterless constructor is not supported. Type 'Wooza.Gateway.Tim.Domain.Events.TransferCreatedEvent'"}
+                        //{"Deserialization of reference types without parameterless constructor is not supported. Type 'Bari.Test.Job.Domain.Events.TransferCreatedEvent'"}
                         //var @event = JsonSerializer.Deserialize<eventType>(message, eventType);
                         var @event = JsonConvert.DeserializeObject(message, eventType);
                         var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);

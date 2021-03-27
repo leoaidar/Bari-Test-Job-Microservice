@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bari.Test.Job.Infra.Bus", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bari.Test.Job.infra.IoC", "Bari.Test.Job.infra.IoC\Bari.Test.Job.infra.IoC.csproj", "{95B9F387-DA65-40E3-8564-72642233288E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bari.Test.Job.Infra.Data", "Bari.Test.Job.Infra.Data\Bari.Test.Job.Infra.Data.csproj", "{65601EF4-CD1C-4067-B1F2-640E47C899B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{95B9F387-DA65-40E3-8564-72642233288E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95B9F387-DA65-40E3-8564-72642233288E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95B9F387-DA65-40E3-8564-72642233288E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +76,7 @@ Global
 		{0320AB87-9E29-4E3F-B305-0297EDECB99B} = {2F0AB301-962F-4500-9BA6-F8A270243865}
 		{AB2D8EEC-8824-49F6-BF34-5F678F892872} = {0320AB87-9E29-4E3F-B305-0297EDECB99B}
 		{95B9F387-DA65-40E3-8564-72642233288E} = {0320AB87-9E29-4E3F-B305-0297EDECB99B}
+		{65601EF4-CD1C-4067-B1F2-640E47C899B5} = {5641EFCC-D4B3-4208-A0F2-71A49E028927}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C6373A19-A0F9-4CD6-9A03-363985AD7E9A}
