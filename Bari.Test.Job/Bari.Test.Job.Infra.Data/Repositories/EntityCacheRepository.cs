@@ -23,7 +23,7 @@ namespace Pasquali.Sisprods.Infra.Data.Repositories
 
         public async Task<IEnumerable<Entity>> GetAll()
         {
-            var value = await _ctx._connection.GetAsync<IEnumerable<Entity>> ("Entitys");
+            var value = await _ctx._connection.GetAsync<IEnumerable<Entity>> ("Entities");
             return ((IEnumerable<Entity>)(value.HasValue ? JsonConvert.DeserializeObject<IEnumerable<Entity>>(value.ToString()) : default));
         }
 

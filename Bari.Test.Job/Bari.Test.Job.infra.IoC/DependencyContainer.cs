@@ -18,6 +18,9 @@ using Bari.Test.Job.Domain.Handlers;
 using Bari.Test.Job.Domain.Queries;
 using Bari.Test.Job.Domain.Queries.Contracts;
 using Bari.Test.Job.Domain.Repositories;
+using Bari.Test.Job.Infra.Data.Repositories;
+using Bari.Test.Job.Infra.Data.Cache;
+using EasyCaching.Core;
 //using Bari.Test.Job.Infra.Data.Contexts;
 //using Bari.Test.Job.Infra.Data.Repositories;
 
@@ -28,43 +31,16 @@ namespace Bari.Test.Job.Infra.IoC
         public static void RegisterServices(IServiceCollection services)
         {
 
-            //Handlers
-            services.AddTransient<MessageCommandHandler, MessageCommandHandler>();
-            //Data
-            ////services.AddSingleton<IRepository<Message>, MessageRepository>();
+            //Repositories
+            //services.AddTransient<MessagesDbContext>();
+            //services.AddTransient<IEasyCachingProvider, IDatabaseCache>();
+            services.AddSingleton<RedisCacheContext>();
+            //Repositories Data
+            services.AddSingleton<IRepository<Message>, MessageRepository>();
             //Repositories cache
-            ////services.AddSingleton<IRepository<Message>, MessageCacheRepository>();
-            
-            ////services.AddTransient<MessagesDbContext>();
-
-            //public void ConfigureServices(IServiceCollection services)
-            //{
-
-            //    services.AddScoped<IShoppingCartRepository, ShoppingCartRepository>();
-
-            //    services.AddSingleton<ShoppingCartCache>();
-            //    services.AddSingleton<ShoppingCartDB>();
-            //    services.AddSingleton<ShoppingCartAPI>();
-
-            //    services.AddTransient<Func<string, IShoppingCart>>(serviceProvider => key =>
-            //    {
-            //        switch (key)
-            //        {
-            //            case "API":
-            //                return serviceProvider.GetService<ShoppingCartAPI>();
-            //            case "DB":
-            //                return serviceProvider.GetService<ShoppingCartDB>();
-            //            default:
-            //                return serviceProvider.GetService<ShoppingCartCache>();
-            //        }
-            //    });
-
-            //    services.AddMvc();
-            //}
+            services.AddSingleton<IRepository<Message>, MessageCacheRepository>();
 
             //Mappers
-            //services.AddAutoMapper(typeof(MessageViewModel), typeof(Message));
-            //services.AddAutoMapper(typeof(Message), typeof(MessageViewModel));
             services.AddAutoMapper(typeof(AutoMapping));
 
             //Domain Bus
@@ -87,38 +63,25 @@ namespace Bari.Test.Job.Infra.IoC
             //Redis Cache
             ////services.AddSingleton<IRedisConnectionFactory, RedisConnectionFactory>();
             ////services.AddSingleton<IDatabase>(c => new RedisConnectionFactory().Connection().GetDatabase());
-
+            
+            //Handlers
             //Handlers commands
             services.AddTransient<MessageCommandHandler, MessageCommandHandler>();
             //Handlers queries
+            services.AddTransient<MessageQueryHandler, MessageQueryHandler>();
+            
 
-            //services.AddScoped(typeof(IMediator), typeof(MessageQueryHandler));
-            //var repositories = new List<IRepository<Message>>
-            //{
-            //    new MessageRepository(),
-            //    new MessageCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())
-            //};
-            //services.AddTransient(c => new MessageQueryHandler(repositories));
-
-
-            //////Subscriptions
-            ////services.AddTransient<TransferEventHandler>();
-
-            //////Domain Events
-            ////services.AddTransient<IEventHandler<TransferCreatedEvent>, TransferEventHandler>();
-
-            //////Domain Banking Commands
-            ////services.AddTransient<IRequestHandler<CreateTransferCommand, bool>, TransferCommandHandler>();
-
+            services.AddScoped(typeof(IMediator), typeof(MessageQueryHandler));
+            var repositories = new List<IRepository<Message>>
+            {
+                new MessageRepository(),
+                new MessageCacheRepository()
+            };
+            services.AddTransient(c => new MessageQueryHandler(repositories));
 
             //////Application Services
             services.AddTransient<IMessageService, MessageService>();
 
-            //////Data
-            //services.AddTransient<IAccountRepository, AccountRepository>();
-            //services.AddTransient<ITransferRepository, TransferRepository>();
-            //services.AddTransient<BankingDbContext>();
-            //services.AddTransient<TransferDbContext>();
 
 
         }

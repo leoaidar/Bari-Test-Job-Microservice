@@ -1,18 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using StackExchange.Redis;
-using StackExchange.Redis.Extensions.Core.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bari.Test.Job.Infra.Data;
-using EasyCaching.Core;
-using Bari.Test.Job.Infra.Data.Cache;
+﻿using EasyCaching.Core;
+using Microsoft.Extensions.Configuration;
 
-namespace Pasquali.Sisprods.Infra.Data.Cache
+namespace Bari.Test.Job.Infra.Data.Cache
 {
     public abstract class RedisCacheContext 
     {

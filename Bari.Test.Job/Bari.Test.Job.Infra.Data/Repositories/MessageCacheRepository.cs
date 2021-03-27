@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using StackExchange.Redis;
 using Newtonsoft.Json;
-using Pasquali.Sisprods.Infra.Data.Cache;
 using Bari.Test.Job.Domain.Repositories;
 using Bari.Test.Job.Domain.Entities;
 using System.Threading.Tasks;
 using Bari.Test.Job.Infra.Data.Cache;
 
-namespace Pasquali.Sisprods.Infra.Data.Repositories
+namespace Bari.Test.Job.Infra.Data.Repositories
 {
     public class MessageCacheRepository : IRepository<Message>
     {
         private RedisCacheContext _ctx;
 
-        public MessageCacheRepository(RedisCacheContext ctx)
+        public MessageCacheRepository(RedisCacheContext ctx) : base()
         {
             _ctx = ctx;
         }
 
+        public MessageCacheRepository()
+        {
+        }
 
         public async Task<IEnumerable<Message>> GetAll()
         {
