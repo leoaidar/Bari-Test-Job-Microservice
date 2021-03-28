@@ -1,8 +1,6 @@
 using Bari.Test.Job.Application.Interfaces;
 using Bari.Test.Job.Application.ViewModels;
 using Bari.Test.Job.Domain.Commands;
-using Bari.Test.Job.Domain.Handlers;
-using EasyCaching.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -19,13 +17,11 @@ namespace Bari.Test.Job.Controllers
     {        
         private readonly IMediator _mediator;
         private readonly ILogger<MessageController> _logger;
-        private readonly IEasyCachingProviderFactory _factory;
 
-        public MessageController(IMediator mediator, ILogger<MessageController> logger, IEasyCachingProviderFactory factory)
+        public MessageController(IMediator mediator, ILogger<MessageController> logger)
         {
             _mediator = mediator;
             _logger = logger;
-            _factory = factory;
         }
 
         [HttpGet]
