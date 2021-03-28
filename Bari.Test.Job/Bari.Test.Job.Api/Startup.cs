@@ -1,3 +1,4 @@
+using Bari.Test.Job.Api.Jobs;
 using Bari.Test.Job.Infra.IoC;
 using Hangfire;
 using Hangfire.MemoryStorage;
@@ -80,6 +81,8 @@ namespace Bari.Test.Job.Api
             // Add the processing server as IHostedService
             services.AddHangfireServer();
 
+            services.AddSingleton<IMessageJob, MessageJob>();
+
             RegisterServices(services);
 
         }
@@ -90,7 +93,7 @@ namespace Bari.Test.Job.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -137,6 +140,8 @@ namespace Bari.Test.Job.Api
             app.UseHangfireDashboard();
             backgroundJobClient.Enqueue(() => Console.WriteLine("HangFire Job for send messages!"));
             recurringJobManager.AddOrUpdate("Run every minutes", () => Console.WriteLine("Test recurring job"), "* * * * *");
+            recurringJobManager.AddOrUpdate("Run every 5 minutes", () => Console.WriteLine("Test recurring job"), "*/3 * * * *");
+            recurringJobManager.AddOrUpdate("Run every 5 minutes", () => serviceProvider.GetService<IMessageJob>().SendMessage(), "*/5 * * * *");
 
 
         }
