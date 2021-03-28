@@ -1,4 +1,6 @@
 using Bari.Test.Job.Infra.IoC;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using HealthChecks.UI.Client;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -27,7 +29,7 @@ namespace Bari.Test.Job.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-
+            
             //services.AddDbContext<ContactsDbContext>(options =>
             //{
             //    options.UseSqlServer(Configuration.GetConnectionString("ContactsDbConnection"));
@@ -50,9 +52,6 @@ namespace Bari.Test.Job.Api
 
             services.AddHealthChecksUI()
                     .AddInMemoryStorage();
-
-
-
             services
                 .AddHealthChecks()
                 .AddRedis(Configuration.GetConnectionString("RedisCacheConnection"), failureStatus: HealthStatus.Degraded)
@@ -70,6 +69,17 @@ namespace Bari.Test.Job.Api
 
             services.AddAutoMapper(typeof(Startup));
 
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseDefaultTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseMemoryStorage());
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
+
             RegisterServices(services);
 
         }
@@ -80,7 +90,7 @@ namespace Bari.Test.Job.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager)
         {
             if (env.IsDevelopment())
             {
@@ -120,7 +130,15 @@ namespace Bari.Test.Job.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                //endpoints.MapHangfireDashboard();
             });
+
+            //https://localhost:5001/hangfire
+            app.UseHangfireDashboard();
+            backgroundJobClient.Enqueue(() => Console.WriteLine("HangFire Job for send messages!"));
+            recurringJobManager.AddOrUpdate("Run every minutes", () => Console.WriteLine("Test recurring job"), "* * * * *");
+
+
         }
     }
 }

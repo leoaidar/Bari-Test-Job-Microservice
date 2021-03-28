@@ -16,7 +16,6 @@ using Bari.Test.Job.Infra.Data.Repositories;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
-//using StackExchange.Redis;
 using System.Collections.Generic;
 //using Bari.Test.Job.Infra.Data.Contexts;
 //using Bari.Test.Job.Infra.Data.Repositories;
