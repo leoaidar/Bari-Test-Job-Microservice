@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Domain.Queries
 {
-    public class GenericQueryResult<T> : IQueryResult
+    public class QueryResult<T> : IQueryResult
     {
-        public GenericQueryResult() { }
+        public QueryResult() { }
 
-        public GenericQueryResult(T entity, IEnumerable<T> entities = null, bool success = true, string message = "", object data = null) : base()
+        public QueryResult(T entity, IEnumerable<T> entities = null, bool success = true, string message = "", object data = null) : base()
         {
             Success = success;
             Message = message;
@@ -24,7 +24,7 @@ namespace Bari.Test.Job.Domain.Queries
         public T Entity { get; set; }
         public IEnumerable<T> Entities { get; set; }
 
-        public static explicit operator GenericQueryResult<T>(Task<IQueryResult> v)
+        public static explicit operator QueryResult<T>(Task<IQueryResult> v)
         {
             throw new NotImplementedException();
         }

@@ -10,6 +10,10 @@ using EasyCaching.Core;
 using EasyCaching.Core.Configurations;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Bari.Test.Job.Infra.IoC;
+using RabbitMQ.Client;
+using System;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 namespace Bari.Test.Job.Api
 {
@@ -67,7 +71,7 @@ namespace Bari.Test.Job.Api
                 //use redis cache that named redis1
                 options.UseRedis(config =>
                 {
-                    config.DBConfig.Endpoints.Add(new ServerEndPoint(Configuration.GetConnectionString("RedisCacheConnection"), 6379));
+                    config.DBConfig.Endpoints.Add(new ServerEndPoint("127.0.0.1", 6379));
                 }, "redis1")
                 .WithMessagePack()//with messagepack serialization
                 ;
@@ -75,13 +79,15 @@ namespace Bari.Test.Job.Api
 
 
 
-            //var connRabbit = Configuration.GetConnectionString("RabbitMQConnection");
 
-            //var factoryRabbit = new ConnectionFactory()
-            //{
-            //    Uri = new Uri(connRabbit),
-            //    AutomaticRecoveryEnabled = true
-            //};
+            var connRabbit = Configuration.GetConnectionString("RabbitMQConnection");
+
+            var factoryRabbit = new ConnectionFactory()
+            {
+                Uri = new Uri(connRabbit),
+                AutomaticRecoveryEnabled = true
+            };
+
 
             services.AddHealthChecksUI()
                     .AddInMemoryStorage();
@@ -89,9 +95,9 @@ namespace Bari.Test.Job.Api
 
 
             services
-                .AddHealthChecks()
-                .AddRedis(Configuration.GetConnectionString("RedisCacheConnection"), failureStatus: HealthStatus.Degraded);
-                //.AddRabbitMQ(Configuration.GetConnectionString("RabbitMQConnection"), name: "rabbitmq", failureStatus: HealthStatus.Degraded);
+                .AddHealthChecks();
+            ////    .AddRedis(Configuration.GetConnectionString("RedisCacheConnection"), failureStatus: HealthStatus.Degraded);
+            //.AddRabbitMQ(Configuration.GetConnectionString("RabbitMQConnection"), name: "rabbitmq", failureStatus: HealthStatus.Degraded);
             //.AddSqlServer(Configuration.GetConnectionString("GatewayTIMDbConnection"), failureStatus: HealthStatus.Degraded)
             //
 
@@ -121,7 +127,7 @@ namespace Bari.Test.Job.Api
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -136,13 +142,21 @@ namespace Bari.Test.Job.Api
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
+
+            app.UseHealthChecks("/hc", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            //nuget: AspNetCore.HealthChecks.UI
             app.UseHealthChecksUI(options =>
             {
                 options.UIPath = "/hc-ui";
                 options.ApiPath = "/hc-ui-api";
             });
 
-            app.UseAuthorization();
+            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -10,66 +10,50 @@ using Bari.Test.Job.Infra.Data.Cache;
 
 namespace Bari.Test.Job.Infra.Data.Repositories
 {
-    public class MessageCacheRepository : IRepository<Message>
+    public class MessageCacheRepository : RedisCacheBaseRepository, IRepository<Message>
     {
-        private RedisCacheContext _ctx;
+        private readonly IDatabase _cacheDB;
 
-        public MessageCacheRepository(RedisCacheContext ctx) : base()
+        public MessageCacheRepository(IDatabase cacheDB)
         {
-            _ctx = ctx;
-        }
-
-        public MessageCacheRepository()
-        {
+            _cacheDB = cacheDB;
         }
 
         public async Task<IEnumerable<Message>> GetAll()
         {
-            var value = await _ctx._connection.GetAsync<IEnumerable<Message>> ("Messages");
-            return ((IEnumerable<Message>)(value.HasValue ? JsonConvert.DeserializeObject<IEnumerable<Message>>(value.ToString()) : default));
+            return await GetObjectAsync<IEnumerable<Message>>(_cacheDB, "Messages");
         }
 
         public async Task<Message> Get(Guid id)
         {
-            var value = await _ctx._connection.GetAsync<Message>($"Message_{id}");
-            return (Message)(value.HasValue ? JsonConvert.DeserializeObject<Message>(value.ToString()) : default);
+            return await GetObjectAsync<Message>(_cacheDB, $"Message_{id}");
         }
 
         public async Task<Message> Create(Message message)
         {
-            await _ctx._connection.SetAsync<string>($"Message_{message.Id}", JsonConvert.SerializeObject(message, Formatting.Indented,
-                                             new JsonSerializerSettings()
-                                             {
-                                                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                                             }
-                                         ), TimeSpan.FromDays(100));
-            return await _ctx._connection.ExistsAsync($"Message_{message.Id}") ? message : null;
-
-            //await _ctx._connection.SetAsync<Message>($"Message_{message.Id}", message, TimeSpan.FromDays(100));
+            var recorded = await SetObjectAsync<Message>(_cacheDB, $"Message_{message.Id}", message);
+            return recorded ? message : null;
         }
 
         public async Task Update(Message message)
         {
-            await _ctx._connection.SetAsync<Message>($"Message_{message.Id}", message, TimeSpan.FromDays(100));
+            await SetObjectAsync<Message>(_cacheDB, $"Message_{message.Id}", message);
         }
 
         public async Task Delete(Guid id)
         {
-            await _ctx._connection.RemoveAsync($"Message_{id}");
+            await DelObjectAsync(_cacheDB, $"Message_{id}");
         }
 
         public async Task Bind<Y>(Y entities, string named = null)
         {
-            await _ctx._connection.SetAsync<Y>(named ?? typeof(Y).Name, entities, TimeSpan.FromDays(100));
-            //return await _ctx._connection.ExistsAsync(named ?? typeof(Y).Name) ? entities : null;
+            await SetObjectAsync<Y>(_cacheDB, named ?? typeof(Y).Name, entities);
         }
-
 
         public async Task<R> GetBy<K, R>(K key)
         {
-            var value = await _ctx._connection.GetAsync<K>(key.ToString());
-            return ((R)(value.HasValue ? JsonConvert.DeserializeObject<R>(value.ToString()) : default));
+            return await GetObjectAsync<R>(_cacheDB, $"{key}");
+            //return ((R)(value.HasValue ? JsonConvert.DeserializeObject<R>(value.ToString()) : default));
         }
-
     }
 }

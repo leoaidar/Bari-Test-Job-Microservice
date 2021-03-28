@@ -13,17 +13,19 @@ namespace Bari.Test.Job.Domain.Handlers
                                                 IRequestHandler<SendMessageCommand, ICommandResult>
     {
         private readonly IRepository<Message> _repository;
+        private readonly IRepository<Entity> _entityRepository;
         private readonly string _genericErrorText;
         private readonly string _genericSuccessText;
 
-        public MessageCommandHandler(IRepository<Message> repository)
+        public MessageCommandHandler(IRepository<Message> repository, IRepository<Entity> entityRepository) : base(entityRepository)
         {
             _repository = repository;
+            _entityRepository = entityRepository;
             _genericErrorText = "Ops, parece que os dados da mensagem estão errados!";
             _genericSuccessText = "Mensagem salva com sucesso!";
         }
 
-        public MessageCommandHandler(IRepository<Message> repository, string genericErrorText, string genericSuccessText) : this(repository)
+        public MessageCommandHandler(IRepository<Message> repository, IRepository<Entity> entityRepository, string genericErrorText, string genericSuccessText) : this(repository, entityRepository)
         {
             _genericErrorText = genericErrorText;
             _genericSuccessText = genericSuccessText;
@@ -31,101 +33,32 @@ namespace Bari.Test.Job.Domain.Handlers
 
         public async Task<ICommandResult> Handle(SendMessageCommand command, CancellationToken cancellationToken)
         {
-            //validando comando preenchido
+            //test command NULL
             if (command == null)
                 return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, null));
 
-            //avalia comando valido
+            //test a valid command
             command.Validate();
             if (command.Invalid)
                 return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, command.Notifications));
 
-            //cria o objeto
-            //var message = new Message("Nova mensagem","Messages-Microservice");
+            //create object
             var message = new Message(command.Body,command.ServiceId);
 
-            // Salva no banco
+            //test business rules
+            message.Validate();
+            if (message.Invalid)
+                return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, "Regra de negócio inválida"));
+
+            //save in database
             await _repository.Create(message);
 
-            //invalida o cache
+            //invalid cache to force update
             INVALIDATE_ONE_CACHE = true;
             INVALIDATE_ALL_CACHE = true;
 
-            // Retorna o resultado
+            //return generic result
             return await Task.FromResult<ICommandResult>(new CommandResult(true, _genericSuccessText, message));
         }
-
-        //public ICommandResult Handle(UpdateClientCommand command)
-        //{
-        //    if (command == null)
-        //        return new CommandResult(false, _genericErrorText, null);
-
-        //    command.Validate();
-        //    if (command.Invalid)
-        //        return new CommandResult(false, _genericErrorText, command.Notifications);
-
-        //    // Recupera 
-        //    var client = _repository.GetById(command.Id);
-
-        //    // modificacoes
-        //    client.UpdateName(command.Name);
-
-        //    // salva no banco
-        //    _repository.Update(client);
-
-        //    INVALIDATE_ONE_CACHE = true;
-        //    INVALIDATE_ALL_CACHE = true;
-
-        //    // Retorna o resultado
-        //    return new CommandResult(true, _genericSuccessText, client);
-        //}
-
-        //public ICommandResult Handle(DeleteClientCommand command)
-        //{
-        //    if (command == null)
-        //        return new CommandResult(false, _genericErrorText, null);
-
-        //    command.Validate();
-        //    if (command.Invalid)
-        //        return new CommandResult(false, _genericErrorText, command.Notifications);
-
-        //    // Recupera 
-        //    var client = _repository.GetById(command.Id);
-
-        //    // apaga no banco
-        //    _repository.Delete(client);
-
-        //    INVALIDATE_ONE_CACHE = true;
-        //    INVALIDATE_ALL_CACHE = true;
-
-        //    // Retorna o resultado
-        //    return new CommandResult(true, "Cliente apagado com sucesso!", client);
-        //}
-
-        //public ICommandResult Handle(AddProductsClientCommand command)
-        //{
-        //    if (command == null)
-        //        return new CommandResult(false, _genericErrorText, null);
-
-        //    command.Validate();
-        //    if (command.Invalid)
-        //        return new CommandResult(false, _genericErrorText, command.Notifications);
-
-        //    // Recupera 
-        //    var client = _repository.GetById(command.ClientId);
-
-        //    // modificacoes
-        //    client.AddProducts(command.Products);
-
-        //    // salva no banco
-        //    _repository.Update(client);
-
-        //    INVALIDATE_ONE_CACHE = true;
-        //    INVALIDATE_ALL_CACHE = true;
-
-        //    // Retorna o resultado
-        //    return new CommandResult(true, "Produtos adicionados com sucesso para este cliente!", client);
-        //}
-
     }
 }

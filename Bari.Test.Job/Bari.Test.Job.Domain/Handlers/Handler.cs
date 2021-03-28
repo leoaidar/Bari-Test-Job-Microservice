@@ -8,6 +8,19 @@ namespace Bari.Test.Job.Domain.Handlers
     {
         private readonly IRepository<Entity> _cacheEntityRepository;
 
+        public Handler()
+        {
+        }
+
+
+        public Handler(IRepository<Entity> cacheEntityRepository) : base()
+        {
+            _cacheEntityRepository = cacheEntityRepository;
+        }
+
+
+
+
         protected bool INVALIDATE_ONE_CACHE
         {
             get
@@ -36,15 +49,7 @@ namespace Bari.Test.Job.Domain.Handlers
 
         }
 
-        public Handler()
-        {
-        }
 
-        public Handler(IRepository<Entity> repository) : base()
-        {
-            //_cacheEntityRepository = repositories.FirstOrDefault(repo => repo.GetType().Name == "EntityCacheRepository");
-            _cacheEntityRepository = repository;
-        }
 
     }
 }

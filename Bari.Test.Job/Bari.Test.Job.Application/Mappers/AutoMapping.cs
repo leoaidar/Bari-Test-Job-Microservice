@@ -9,10 +9,10 @@ namespace Bari.Test.Job.Application.Mappers
     {
         public AutoMapping()
         {
-            CreateMap<Message, MessageViewModel>();            
+            CreateMap<Message, MessageViewModel>();
             CreateMap<MessageViewModel, Message>();
-            //CreateMap<TestCommandMessage, Contact>();
-            //CreateMap<Contact, TestCommandMessage>();
+            CreateMap<MessageSentCommand, Message>();
+            CreateMap<Message, MessageSentCommand>();
             CreateMap<MessageCreatedEvent, Message>();
             CreateMap<Message, MessageCreatedEvent>();
         }

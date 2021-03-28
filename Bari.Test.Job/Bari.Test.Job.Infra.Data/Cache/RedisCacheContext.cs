@@ -10,7 +10,12 @@ namespace Bari.Test.Job.Infra.Data.Cache
         private readonly IEasyCachingProviderFactory _cachingProviderFactory;
         //private readonly AppConfiguration _appConfiguration = new AppConfiguration();
 
-        public RedisCacheContext(IEasyCachingProviderFactory cachingProviderFactory)
+        public RedisCacheContext()
+        {
+
+        }
+
+        public RedisCacheContext(IEasyCachingProviderFactory cachingProviderFactory) : base()
         {
             var connectionStringCacheChannel = new AppConfiguration().AppSettings.GetConnectionString("RedisCacheChannel");
             _cachingProviderFactory = cachingProviderFactory;            

@@ -1,57 +1,60 @@
-using System;
-using System.Collections.Generic;
+using Bari.Test.Job.Application.Interfaces;
+using Bari.Test.Job.Application.ViewModels;
 using Bari.Test.Job.Domain.Commands;
-using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Handlers;
-using Bari.Test.Job.Domain.Repositories;
+using EasyCaching.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using System.Web.Http.Description;
-using System.Threading.Tasks;
-using Bari.Test.Job.Application.Interfaces;
 using Microsoft.Extensions.Logging;
-using Bari.Test.Job.Application.ViewModels;
-using MediatR;
-using Bari.Test.Job.Domain.Queries;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http.Description;
 
 namespace Bari.Test.Job.Controllers
 {
     [ApiController]
-    [Route("v1/messages")]
+    [Route("v1/message")]
     public class MessageController : ControllerBase
     {        
         private readonly IMediator _mediator;
         private readonly ILogger<MessageController> _logger;
+        private readonly IEasyCachingProviderFactory _factory;
 
-        public MessageController(IMediator mediator, ILogger<MessageController> logger)
+        public MessageController(IMediator mediator, ILogger<MessageController> logger, IEasyCachingProviderFactory factory)
         {
             _mediator = mediator;
-            _logger = logger;            
+            _logger = logger;
+            _factory = factory;
         }
 
         [HttpGet]
         [ResponseType(typeof(IEnumerable<MessageViewModel>))]
-        public async Task<IActionResult> Get([FromServices] MessageQueryHandler handler)
+        public async Task<IActionResult> Get([FromServices] IMessageService service)
         {
-
-            var query = await handler.Handle(new MessageGetAllQuery(), new System.Threading.CancellationToken());
+            var query = await service.GetAll(new System.Threading.CancellationToken());
 
             if (query == null)
                 return NotFound();
-                //return await Task.FromResult<IActionResult>(NotFound());
 
             return Ok(query);
-            //return await Task.FromResult<IActionResult>(Ok(query));
         }
 
         [HttpPost]
-        public CommandResult Create(
+        [ResponseType(typeof(CommandResult))]
+        public IActionResult Create(
             [FromBody] SendMessageCommand command,
-            [FromServices] MessageCommandHandler handler
+            [FromServices] IMessageService service
         )
         {
-            return (CommandResult) handler.Handle(command, new System.Threading.CancellationToken());
+            var cmd = service.SendMessage(command, new System.Threading.CancellationToken());
+
+            if (cmd == null)
+                return NotFound();
+
+            return Ok(cmd.Result);
         }
+
 
 
     }

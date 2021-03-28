@@ -14,13 +14,15 @@ namespace Bari.Test.Job.Domain.Handlers
     public class MessageQueryHandler : Handler,
                                                 IRequestHandler<MessageGetAllQuery, IQueryResult>
     {
+        private readonly IRepository<Entity> _entityRepository;
         private readonly IRepository<Message> _repository;
         private readonly IRepository<Message> _cacheRepository;
         private readonly string _genericErrorText;
         private readonly string _genericSuccessText;
 
-        public MessageQueryHandler(IEnumerable<IRepository<Message>> repositories) 
+        public MessageQueryHandler(IEnumerable<IRepository<Message>> repositories, IRepository<Entity> entityRepository) : base(entityRepository)
         {
+            _entityRepository = entityRepository;
             _repository = repositories.FirstOrDefault(repo => repo.GetType().Name == "MessageRepository");
             _cacheRepository = repositories.FirstOrDefault(repo => repo.GetType().Name == "MessageCacheRepository");
             _genericErrorText = "Ops, parece que os dados da Mensagem estão errados!";
@@ -36,7 +38,7 @@ namespace Bari.Test.Job.Domain.Handlers
 
                 //avalia se trouxe e o cache nao ta desatualizado
                 if (cached != null && !INVALIDATE_ALL_CACHE)
-                    return await Task.FromResult<IQueryResult>(new GenericQueryResult<IEnumerable<Message>>(cached, success: true, message: _genericSuccessText));
+                    return await Task.FromResult<IQueryResult>(new QueryResult<IEnumerable<Message>>(cached, success: true, message: _genericSuccessText));
 
                 //pega do banco de dados (SQLServer)
                 var messages = await _repository.GetAll();
@@ -51,14 +53,14 @@ namespace Bari.Test.Job.Domain.Handlers
 
                 //await _mediator.Publish(new PessoaAlteradaNotification { Id = pessoa.Id, Nome = pessoa.Nome, Idade = pessoa.Idade, Sexo = pessoa.Sexo, IsEfetivado = true });
 
-                return await Task.FromResult<IQueryResult>(new GenericQueryResult<IEnumerable<Message>>(messages, success: true, message: _genericSuccessText));
+                return await Task.FromResult<IQueryResult>(new QueryResult<IEnumerable<Message>>(messages, success: true, message: _genericSuccessText));
             }
             catch (Exception ex)
             {
                 //await _mediator.Publish(new PessoaAlteradaNotification { Id = pessoa.Id, Nome = pessoa.Nome, Idade = pessoa.Idade, Sexo = pessoa.Sexo, IsEfetivado = false });
                 //await _mediator.Publish(new ErroNotification { Excecao = ex.Message, PilhaErro = ex.StackTrace });
 
-                return await Task.FromResult<IQueryResult>(new GenericQueryResult<IEnumerable<Message>>(null, success: false, message: ex.Message));
+                return await Task.FromResult<IQueryResult>(new QueryResult<IEnumerable<Message>>(null, success: false, message: ex.Message));
             }
 
         }
