@@ -1,57 +1,54 @@
 ﻿
+using Bari.Test.Job.Domain.Entities;
+using Bari.Test.Job.Domain.Repositories;
+using Bari.Test.Job.Infra.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-//using Microsoft.EntityFrameworkCore;
-//using Bari.Test.Job.Infra.Data.Contexts;
-using Bari.Test.Job.Domain.Entities;
-using Bari.Test.Job.Domain.Repositories;
-using Bari.Test.Job.Domain.Queries;
 using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Infra.Data.Repositories
 {
     public class MessageRepository : IRepository<Message>
     {
-        private static Dictionary<int, Message> messages = new Dictionary<int, Message>();
+        private MessagesDbContext _ctx;
 
-        public MessageRepository()
+        public MessageRepository(MessagesDbContext ctx)
         {
-            messages.Add(messages.Count() + 1, new Message("Léo"+ messages.Count() + 1, "M"));
-            messages.Add(messages.Count() + 1, new Message("Jamiles"+ messages.Count() + 1, "F"));
+            _ctx = ctx;
         }
 
         public async Task<IEnumerable<Message>> GetAll()
         {
-            return await Task.Run(() => messages.Values.ToList());
+            return await _ctx.Messages.ToListAsync();
         }
 
         public async Task<Message> Get(Guid id)
         {
-            return await Task.Run(() => messages.FirstOrDefault(x => x.Value.Id == id).Value);
+            return await _ctx
+                .Messages
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Message> Create(Message msg)
         {
-            return await Task.Run(() => {
-                
-                messages.Add(messages.Count() + 1, msg);
-                return msg;
-            });
+            await _ctx.Messages.AddAsync(msg);
+            _ctx.SaveChanges();
+            return msg;
         }
 
         public async Task Update(Message msg)
         {
-            await Task.Run(() =>
-            {
-                messages.Remove(messages.FirstOrDefault(x=> x.Value.Id == msg.Id).Key);
-                messages.Add(messages.Count() + 1, msg);
-            });
+            _ctx.Entry(msg).State = EntityState.Modified;
+            await _ctx.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
-            await Task.Run(() => messages.Remove(messages.FirstOrDefault(x => x.Value.Id == id).Key));
+            var msg = await _ctx.Messages.FirstOrDefaultAsync(x => x.Id == id);
+            _ctx.Messages.Remove(msg);
+            await _ctx.SaveChangesAsync();
         }
 
         public Task Bind<Y>(Y entities, string named)
