@@ -8,11 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["Bari.Test.Job.Api/Bari.Test.Job.Api.csproj", "Bari.Test.Job.Api/"]
-COPY ["Bari.Test.Job.Domain/Bari.Test.Job.Domain.csproj", "Bari.Test.Job.Domain/"]
-COPY ["Bari.Test.Job.Application/Bari.Test.Job.Application.csproj", "Bari.Test.Job.Application/"]
-COPY ["Bari.Test.Job.infra.IoC/Bari.Test.Job.infra.IoC.csproj", "Bari.Test.Job.infra.IoC/"]
-COPY ["Bari.Test.Job.Infra.Data/Bari.Test.Job.Infra.Data.csproj", "Bari.Test.Job.Infra.Data/"]
-COPY ["Bari.Test.Job.Infra.Bus/Bari.Test.Job.Infra.Bus.csproj", "Bari.Test.Job.Infra.Bus/"]
 RUN dotnet restore "Bari.Test.Job.Api/Bari.Test.Job.Api.csproj"
 COPY . .
 WORKDIR "/src/Bari.Test.Job.Api"

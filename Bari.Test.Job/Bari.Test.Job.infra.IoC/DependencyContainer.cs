@@ -20,6 +20,8 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System.Collections.Generic;
 using Bari.Test.Job.Infra.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+using Bari.Test.Job.Infra.Data;
 
 namespace Bari.Test.Job.Infra.IoC
 {
@@ -27,8 +29,11 @@ namespace Bari.Test.Job.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
+
             //SQL Server
-            services.AddTransient<MessagesDbContext>();
+            //services.AddDbContext<MessagesDbContext>(options =>
+            //        options.UseSqlServer(new AppConfiguration().ConnectionString("MessagesDbConnection")));
+
 
             //Redis Cache
             services.AddSingleton<IRedisConnectionFactory, RedisConnectionFactory>();
@@ -43,8 +48,10 @@ namespace Bari.Test.Job.Infra.IoC
             services.AddTransient<IRequestHandler<SendMessageCommand, ICommandResult>, MessageCommandHandler>();
             //Handlers queries
             services.AddTransient<IRequestHandler<MessageGetAllQuery, IQueryResult>, MessageQueryHandler>();
+            //var options = new DbContextOptions<MessagesDbContext>();
             var repositories = new List<IRepository<Message>>
             {
+                //new MessageRepository(new MessagesDbContext(options)),
                 new MessageRepository(),
                 new MessageCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())
             };
@@ -53,9 +60,10 @@ namespace Bari.Test.Job.Infra.IoC
             //services.AddTransient<MessageEventHandler, MessageEventHandler>();
             //services.AddTransient<IRequestHandler<MessageCreatedEvent, IEventResult>, MessageEventHandler>();
 
+
             //Repositories
             //Repositories Data
-            services.AddTransient<MessageRepository>();
+            //services.AddTransient<MessageRepository>();
             services.AddSingleton<IRepository<Message>, MessageRepository>();
             //Repositories cache
             services.AddSingleton<IRepository<Message>, MessageCacheRepository>();
