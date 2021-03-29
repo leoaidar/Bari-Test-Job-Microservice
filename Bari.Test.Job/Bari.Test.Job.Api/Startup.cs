@@ -2,6 +2,7 @@ using Bari.Test.Job.Api.Jobs;
 using Bari.Test.Job.Domain.Events;
 using Bari.Test.Job.Domain.Events.Bus.MQ;
 using Bari.Test.Job.Domain.Handlers;
+using Bari.Test.Job.Infra.Data.Contexts;
 using Bari.Test.Job.Infra.IoC;
 using Hangfire;
 using Hangfire.MemoryStorage;
@@ -10,6 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -33,11 +35,10 @@ namespace Bari.Test.Job.Api
         public void ConfigureServices(IServiceCollection services)
         {
 
-            
-            //services.AddDbContext<ContactsDbContext>(options =>
-            //{
-            //    options.UseSqlServer(Configuration.GetConnectionString("ContactsDbConnection"));
-            //});
+            services.AddDbContext<MessagesDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("MessagesDbConnection"));
+            });
 
 
             services.AddControllers().AddNewtonsoftJson(options =>

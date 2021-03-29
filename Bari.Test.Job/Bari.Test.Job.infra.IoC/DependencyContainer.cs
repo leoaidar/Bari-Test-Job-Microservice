@@ -19,8 +19,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System.Collections.Generic;
-//using Bari.Test.Job.Infra.Data.Contexts;
-//using Bari.Test.Job.Infra.Data.Repositories;
+using Bari.Test.Job.Infra.Data.Contexts;
 
 namespace Bari.Test.Job.Infra.IoC
 {
@@ -28,6 +27,8 @@ namespace Bari.Test.Job.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
+            //SQL Server
+            services.AddTransient<MessagesDbContext>();
 
             //Redis Cache
             services.AddSingleton<IRedisConnectionFactory, RedisConnectionFactory>();
