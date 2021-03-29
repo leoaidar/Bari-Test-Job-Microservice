@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Bari.Test.Job.Domain.Entities
 {
@@ -14,11 +12,23 @@ namespace Bari.Test.Job.Domain.Entities
         {
             Body = body;
             ServiceId = serviceId;
+            LastUpdateDate = DateTime.Now;
         }
 
         public string Body { get; set; }
 
-        public double Timestamp { get { return (double)((TimeSpan)(CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime())).TotalSeconds; } }
+        public double Timestamp { 
+                                    get 
+                                    { 
+                                        return (this.Timestamp == 0) ? 
+                                                        (double)((TimeSpan)(CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime())).TotalSeconds
+                                                        : this.Timestamp; 
+                                    } 
+                                    set 
+                                    {
+                                        this.Timestamp = value;
+                                    } 
+                                }
 
         public string ServiceId { get; set; }
 

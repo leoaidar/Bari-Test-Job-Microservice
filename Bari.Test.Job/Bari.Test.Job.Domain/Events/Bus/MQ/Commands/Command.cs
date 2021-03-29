@@ -3,7 +3,7 @@ using System;
 
 namespace Bari.Test.Job.Domain.Events.Bus.MQ.Commands
 {
-    public abstract class Command : Message
+    public abstract class Command : MessageEvent
     {
         public DateTime Timestamp { get; protected set; }
         public Command()

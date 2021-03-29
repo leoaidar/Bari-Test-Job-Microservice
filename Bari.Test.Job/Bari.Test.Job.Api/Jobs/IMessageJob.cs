@@ -1,7 +1,9 @@
-﻿namespace Bari.Test.Job.Api.Jobs
+﻿using System.Threading.Tasks;
+
+namespace Bari.Test.Job.Api.Jobs
 {
     public interface IMessageJob
     {
-        public void SendMessage();
+        public Task SendMessage();
     }
 }

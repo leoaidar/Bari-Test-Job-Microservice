@@ -19,28 +19,13 @@ namespace Bari.Test.Job.Infra.Data.Cache
             
             var connectionString = _appConfiguration.AppSettings.GetConnectionString("RedisCacheConnection");
             var connectionString2 = _appConfiguration.ConnectionString("RedisCacheConnection");
-            try
-            {
-                this._connection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(connectionString));
-            }
-            catch (Exception)
-            {
 
-            }
+            this._connection = new Lazy<ConnectionMultiplexer>(() => ConnectionMultiplexer.Connect(connectionString));
                    
         }
         public ConnectionMultiplexer Connection()
         {
-            try
-            {
-                return this._connection.Value;
-            }
-            catch (Exception)
-            {
-
-            }
-
-            return null;
+            return this._connection.Value;
         }
 
     }

@@ -5,7 +5,9 @@ using Bari.Test.Job.Application.Services;
 using Bari.Test.Job.Domain.Commands;
 using Bari.Test.Job.Domain.Commands.Contracts;
 using Bari.Test.Job.Domain.Entities;
+using Bari.Test.Job.Domain.Events;
 using Bari.Test.Job.Domain.Events.Bus.MQ;
+using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
 using Bari.Test.Job.Domain.Handlers;
 using Bari.Test.Job.Domain.Queries;
 using Bari.Test.Job.Domain.Queries.Contracts;
@@ -46,6 +48,9 @@ namespace Bari.Test.Job.Infra.IoC
                 new MessageCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())
             };
             services.AddTransient(c => new MessageQueryHandler(repositories, new EntityCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())));
+            //Handlers events
+            //services.AddTransient<MessageEventHandler, MessageEventHandler>();
+            //services.AddTransient<IRequestHandler<MessageCreatedEvent, IEventResult>, MessageEventHandler>();
 
             //Repositories
             //Repositories Data
@@ -72,11 +77,8 @@ namespace Bari.Test.Job.Infra.IoC
 
             });
 
-
-
-
-       
-
+            //Jobs
+            //services.AddSingleton<IMessageJob, MessageJob>();
 
         }
     }

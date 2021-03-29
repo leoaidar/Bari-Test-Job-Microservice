@@ -1,11 +1,12 @@
 ﻿using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
+using MediatR;
 using System;
 
 namespace Bari.Test.Job.Domain.Events
 {
-    public class MessageCreatedEvent : Event
+    public class MessageCreatedEvent : Event, IRequest<IEventResult>
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         public string Body { get; set; }
 

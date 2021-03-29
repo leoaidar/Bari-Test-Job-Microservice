@@ -45,16 +45,13 @@ namespace Bari.Test.Job.Application.Services
 
             var handler = (CommandResult)await (_mediator.Send(command, cancellationToken));
 
-            //var messageCommand = _mapper.Map<MessageSentCommand>(handler.Data);
-
             var messageEvent = _mapper.Map<MessageCreatedEvent>(handler.Data);
 
             var viewModel = _mapper.Map<MessageViewModel>(handler.Data);
 
             handler.Data = viewModel;
 
-            //await _bus.SendCommand(messageCommand);
-
+            // publish event ot RabbitMQ
             _bus.Publish(messageEvent);
 
             return handler;
