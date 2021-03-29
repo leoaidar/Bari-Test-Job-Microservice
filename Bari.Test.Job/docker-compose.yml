@@ -1,8 +1,10 @@
 version: '3.4'
 
 services:
+
+
   redis:
-    image: "redis:alpine"
+    image: "redis:latest"
     hostname: redis
     ports:
         - "6379:6379"
@@ -10,7 +12,7 @@ services:
     networks: 
         - bari-network
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3-management
     container_name: 'rabbitmq'
     ports:
         - 5672:5672
@@ -24,6 +26,9 @@ services:
   bari.test.job.api:
     image: ${DOCKER_REGISTRY-}baritestjobapi             
     restart: always
+    depends_on:
+        - redis
+        - rabbitmq
     environment: 
         TZ: America/Sao_Paulo
     ports: 

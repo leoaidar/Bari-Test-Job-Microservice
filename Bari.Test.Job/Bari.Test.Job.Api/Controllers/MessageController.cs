@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Description;
@@ -28,12 +29,20 @@ namespace Bari.Test.Job.Controllers
         [ResponseType(typeof(IEnumerable<MessageViewModel>))]
         public async Task<IActionResult> Get([FromServices] IMessageService service)
         {
-            var query = await service.GetAll(new System.Threading.CancellationToken());
+            try
+            {
+                var query = await service.GetAll(new System.Threading.CancellationToken());
 
-            if (query == null)
-                return NotFound();
+                if (query == null)
+                    return NotFound();
 
-            return Ok(query);
+                return Ok(query);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
         [HttpPost]
@@ -43,12 +52,22 @@ namespace Bari.Test.Job.Controllers
             [FromServices] IMessageService service
         )
         {
-            var cmd = service.SendMessage(command, new System.Threading.CancellationToken());
 
-            if (cmd == null)
-                return NotFound();
 
-            return Ok(cmd.Result);
+            try
+            {
+                var cmd = service.SendMessage(command, new System.Threading.CancellationToken());
+
+                if (cmd == null)
+                    return NotFound();
+
+                return Ok(cmd.Result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex.StackTrace);
+                return StatusCode(500);
+            }
         }
 
 
