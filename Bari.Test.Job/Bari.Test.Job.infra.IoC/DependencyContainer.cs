@@ -38,9 +38,6 @@ namespace Bari.Test.Job.Infra.IoC
             services.AddTransient<IMessageService, MessageService>();
 
             //Handlers
-            //Handlers commands
-            services.AddTransient<MessageCommandHandler, MessageCommandHandler>();
-            services.AddTransient<IRequestHandler<SendMessageCommand, ICommandResult>, MessageCommandHandler>();
             //Handlers queries
             services.AddTransient<IRequestHandler<MessageGetAllQuery, IQueryResult>, MessageQueryHandler>();
             //var options = new DbContextOptions<MessagesDbContext>();
@@ -51,6 +48,10 @@ namespace Bari.Test.Job.Infra.IoC
                 new MessageCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())
             };
             services.AddTransient(c => new MessageQueryHandler(repositories, new EntityCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())));
+            //Handlers commands
+            //services.AddTransient<MessageCommandHandler, MessageCommandHandler>();
+            services.AddTransient(c => new MessageCommandHandler(repositories, new EntityCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())));
+            services.AddTransient<IRequestHandler<SendMessageCommand, ICommandResult>, MessageCommandHandler>();
             //Handlers events
             //services.AddTransient<MessageEventHandler, MessageEventHandler>();
             //services.AddTransient<IRequestHandler<MessageCreatedEvent, IEventResult>, MessageEventHandler>();

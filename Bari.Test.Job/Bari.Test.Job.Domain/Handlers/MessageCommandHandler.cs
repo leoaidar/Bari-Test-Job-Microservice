@@ -4,28 +4,30 @@ using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Repositories;
 using MediatR;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Bari.Test.Job.Domain.Handlers
 {
     public class MessageCommandHandler : Handler,
                                                 IRequestHandler<SendMessageCommand, ICommandResult>
     {
-        private readonly IRepository<Message> _repository;
+        private readonly IEnumerable<IRepository<Message>> _repositories;
         private readonly IRepository<Entity> _entityRepository;
         private readonly string _genericErrorText;
         private readonly string _genericSuccessText;
 
-        public MessageCommandHandler(IRepository<Message> repository, IRepository<Entity> entityRepository) : base(entityRepository)
+        public MessageCommandHandler(IEnumerable<IRepository<Message>> repositories, IRepository<Entity> entityRepository) : base(entityRepository)
         {
-            _repository = repository;
+            _repositories = repositories;
             _entityRepository = entityRepository;
             _genericErrorText = "Ops, parece que os dados da mensagem estão errados!";
             _genericSuccessText = "Mensagem salva com sucesso!";
         }
 
-        public MessageCommandHandler(IRepository<Message> repository, IRepository<Entity> entityRepository, string genericErrorText, string genericSuccessText) : this(repository, entityRepository)
+        public MessageCommandHandler(IEnumerable<IRepository<Message>> repositories, IRepository<Entity> entityRepository, string genericErrorText, string genericSuccessText) : this(repositories, entityRepository)
         {
             _genericErrorText = genericErrorText;
             _genericSuccessText = genericSuccessText;
@@ -51,7 +53,8 @@ namespace Bari.Test.Job.Domain.Handlers
                 return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, "Regra de negócio inválida"));
 
             //save in database
-            await _repository.Create(message);
+            await _repositories.First().Create(message);
+            await _repositories.ElementAt(1).Create(message);
 
             //invalid cache to force update
             INVALIDATE_ONE_CACHE = true;

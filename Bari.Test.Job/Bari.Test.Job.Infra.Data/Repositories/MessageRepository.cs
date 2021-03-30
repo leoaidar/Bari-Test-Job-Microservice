@@ -17,8 +17,8 @@ namespace Bari.Test.Job.Infra.Data.Repositories
 
         public MessageRepository()
         {
-            messages.Add(messages.Count() + 1, new Message("Léo" + messages.Count() + 1, "M"));
-            messages.Add(messages.Count() + 1, new Message("Jamiles" + messages.Count() + 1, "F"));
+            //messages.Add(messages.Count() + 1, new Message("Léo" + messages.Count() + 1, "M"));
+            //messages.Add(messages.Count() + 1, new Message("Jamiles" + messages.Count() + 1, "F"));
         }
 
         public async Task<IEnumerable<Message>> GetAll()

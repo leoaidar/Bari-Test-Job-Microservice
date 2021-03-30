@@ -43,8 +43,6 @@ namespace Bari.Test.Job.Domain.Handlers
                 //pega do banco de dados (SQLServer)
                 var messages = await _repository.GetAll();
 
-                
-
                 //avalia se trouxe e o cache ta desatualizado
                 if ((messages != null) && (cached == null || INVALIDATE_ALL_CACHE))
                     await _cacheRepository.Bind<Message[]>(messages.ToArray(), "Messages");
