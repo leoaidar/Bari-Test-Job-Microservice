@@ -5,9 +5,7 @@ using Bari.Test.Job.Application.Services;
 using Bari.Test.Job.Domain.Commands;
 using Bari.Test.Job.Domain.Commands.Contracts;
 using Bari.Test.Job.Domain.Entities;
-using Bari.Test.Job.Domain.Events;
 using Bari.Test.Job.Domain.Events.Bus.MQ;
-using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
 using Bari.Test.Job.Domain.Handlers;
 using Bari.Test.Job.Domain.Queries;
 using Bari.Test.Job.Domain.Queries.Contracts;
@@ -19,9 +17,6 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using System.Collections.Generic;
-using Bari.Test.Job.Infra.Data.Contexts;
-using Microsoft.EntityFrameworkCore;
-using Bari.Test.Job.Infra.Data;
 
 namespace Bari.Test.Job.Infra.IoC
 {
