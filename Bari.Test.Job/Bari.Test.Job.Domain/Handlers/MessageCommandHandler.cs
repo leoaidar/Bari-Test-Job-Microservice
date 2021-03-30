@@ -55,10 +55,13 @@ namespace Bari.Test.Job.Domain.Handlers
             //save in databases
             await _repositories.First().Create(message);
             await _repositories.ElementAt(1).Create(message);
-            var messagesCached = await _repositories.ElementAt(1).GetAll();
-            messagesCached.Append(message);
-            await _repositories.ElementAt(1).Bind<IEnumerable<Message>>(messagesCached, "Messages");
 
+            List<Message> messagesCached = (List<Message>)await _repositories.ElementAt(1).GetAll();
+
+            if (messagesCached == null || messagesCached.Count() == 0) messagesCached = new List<Message>() { message };
+            else messagesCached.Add(message);
+
+            await _repositories.ElementAt(1).Bind<IEnumerable<Message>>(messagesCached, "Messages");
 
             //working with Redis as main storage at the moment
             INVALIDATE_ONE_CACHE = false;
