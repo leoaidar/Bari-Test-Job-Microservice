@@ -13,22 +13,12 @@ namespace Bari.Test.Job.Domain.Entities
             Body = body;
             ServiceId = serviceId;
             LastUpdateDate = DateTime.Now;
+            TimestampCalc();
         }
 
         public string Body { get; set; }
 
-        public double Timestamp { 
-                                    get 
-                                    { 
-                                        return (this.Timestamp == 0) ? 
-                                                        (double)((TimeSpan)(CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime())).TotalSeconds
-                                                        : this.Timestamp; 
-                                    } 
-                                    set 
-                                    {
-                                        this.Timestamp = value;
-                                    } 
-                                }
+        public double Timestamp { get; set; }
 
         public string ServiceId { get; set; }
 
@@ -36,6 +26,11 @@ namespace Bari.Test.Job.Domain.Entities
         {
             if (string.IsNullOrEmpty(Body?.Trim()))
                 Invalid = true;
+        }
+
+        public void TimestampCalc()
+        {
+            Timestamp = (double)((TimeSpan)(CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime())).TotalSeconds;
         }
 
         

@@ -13,7 +13,7 @@ namespace Bari.Test.Job.Domain.Entities
         }
 
         public Guid Id { get; private set; }
-        public DateTime? CreateDate { get; private set; }
+        public DateTime? CreateDate { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public bool Invalid { get; set; }
 

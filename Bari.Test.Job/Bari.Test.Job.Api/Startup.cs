@@ -138,6 +138,7 @@ namespace Bari.Test.Job.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/hc").RequireHost("localhost:5000");
                 //endpoints.MapHangfireDashboard();
             });
 

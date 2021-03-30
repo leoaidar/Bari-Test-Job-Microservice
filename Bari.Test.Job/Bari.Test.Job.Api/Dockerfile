@@ -24,4 +24,4 @@ RUN dotnet publish "Bari.Test.Job.Api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Bari.Test.Job.Api.dll"]
+ENTRYPOINT ["dotnet", "Bari.Test.Job.Api.dll", "--urls", "https://0.0.0.0:5000"]

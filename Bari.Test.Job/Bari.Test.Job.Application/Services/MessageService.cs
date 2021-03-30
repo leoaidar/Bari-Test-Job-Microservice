@@ -33,6 +33,7 @@ namespace Bari.Test.Job.Application.Services
 
         public async Task<IEnumerable<MessageViewModel>> GetAll(CancellationToken cancellationToken)
         {
+
             var handler = (QueryResult<IEnumerable<Message>>)await (_mediator.Send(new MessageGetAllQuery(), cancellationToken));
 
             var collection = _mapper.Map<IEnumerable<MessageViewModel>>(handler.Entity);
