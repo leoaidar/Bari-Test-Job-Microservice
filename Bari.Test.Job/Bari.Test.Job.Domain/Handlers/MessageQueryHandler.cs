@@ -45,7 +45,7 @@ namespace Bari.Test.Job.Domain.Handlers
 
                 //avalia se trouxe e o cache ta desatualizado
                 if ((messages != null) && (cached == null || INVALIDATE_ALL_CACHE))
-                    await _cacheRepository.Bind<Message[]>(messages.ToArray(), "Messages");
+                    await _cacheRepository.Bind<IEnumerable<Message>>(messages, "Messages");
 
                 //valida o cache
                 INVALIDATE_ONE_CACHE = false;

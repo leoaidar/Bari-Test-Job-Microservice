@@ -52,13 +52,20 @@ namespace Bari.Test.Job.Domain.Handlers
             if (message.Invalid)
                 return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, "Regra de negócio inválida"));
 
-            //save in database
+            //save in databases
             await _repositories.First().Create(message);
             await _repositories.ElementAt(1).Create(message);
+            var messagesCached = await _repositories.ElementAt(1).GetAll();
+            messagesCached.Append(message);
+            await _repositories.ElementAt(1).Bind<IEnumerable<Message>>(messagesCached, "Messages");
 
-            //invalid cache to force update
-            INVALIDATE_ONE_CACHE = true;
-            INVALIDATE_ALL_CACHE = true;
+
+            //working with Redis as main storage at the moment
+            INVALIDATE_ONE_CACHE = false;
+            INVALIDATE_ALL_CACHE = false;
+            ////invalid cache to force update
+            //INVALIDATE_ONE_CACHE = true;
+            //INVALIDATE_ALL_CACHE = true;
 
             //return generic result
             return await Task.FromResult<ICommandResult>(new CommandResult(true, _genericSuccessText, message));
