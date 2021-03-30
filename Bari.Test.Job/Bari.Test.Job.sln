@@ -29,8 +29,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bari.Test.Job.infra.IoC", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bari.Test.Job.Infra.Data", "Bari.Test.Job.Infra.Data\Bari.Test.Job.Infra.Data.csproj", "{65601EF4-CD1C-4067-B1F2-640E47C899B5}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2781CA69-D60E-483C-8FAC-E795B1579AE6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,10 +63,6 @@ Global
 		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65601EF4-CD1C-4067-B1F2-640E47C899B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2781CA69-D60E-483C-8FAC-E795B1579AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2781CA69-D60E-483C-8FAC-E795B1579AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2781CA69-D60E-483C-8FAC-E795B1579AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2781CA69-D60E-483C-8FAC-E795B1579AE6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
