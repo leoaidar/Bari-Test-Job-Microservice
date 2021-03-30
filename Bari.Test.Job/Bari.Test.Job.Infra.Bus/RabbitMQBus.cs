@@ -22,12 +22,15 @@ namespace Bari.Test.Job.Infra.Bus
         private readonly List<Type> _eventTypes;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
+        private readonly AppConfiguration _appConfiguration;
+
         public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
             _mediator = mediator;
             _serviceScopeFactory = serviceScopeFactory;
             _handlers = new Dictionary<string, List<Type>>();
             _eventTypes = new List<Type>();
+            _appConfiguration = new AppConfiguration();
         }
 
         public Task SendCommand<T>(T command) where T : Command
@@ -37,7 +40,8 @@ namespace Bari.Test.Job.Infra.Bus
 
         public void Publish<T>(T @event) where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost" };
+            var hostname = _appConfiguration.ConnectionString("RabbitMQHostname");
+            var factory = new ConnectionFactory() { HostName = hostname };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -88,7 +92,8 @@ namespace Bari.Test.Job.Infra.Bus
 
         private void StartBasicConsumer<T>() where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
+            var hostname = _appConfiguration.ConnectionString("RabbitMQHostname");
+            var factory = new ConnectionFactory() { HostName = hostname, DispatchConsumersAsync = true };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
 
