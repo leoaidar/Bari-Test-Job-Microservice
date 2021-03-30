@@ -36,7 +36,7 @@ namespace Bari.Test.Job.Tests.EntitiesTests
         [TestMethod]
         public void Test_Message_should_have_a_valid_timestamp_value()
         {
-            var message = new Message { Body = "Hello World!", ServiceId = "Messages-Microservice" };
+            var message = new Message("Hello World!", "Messages-Microservice");
 
             TimeSpan epoch = ((TimeSpan)(message.CreateDate - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()));
             //return the total seconds (which is a UNIX timestamp)
