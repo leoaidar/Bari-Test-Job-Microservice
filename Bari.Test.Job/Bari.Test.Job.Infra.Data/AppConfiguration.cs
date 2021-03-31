@@ -13,7 +13,6 @@ namespace Bari.Test.Job.Infra.Data
             var configurationBuilder = new ConfigurationBuilder();
             var path = Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json");
             configurationBuilder.AddJsonFile(path, false);
-
             _appSettings = configurationBuilder.Build();            
         }
 

@@ -9,17 +9,16 @@ namespace Bari.Test.Job.Infra.Data.Cache
 
         protected async Task<bool> SetObjectAsync<T>(IDatabase cache, string key, T value)
         {
-            var json = JsonConvert.SerializeObject(value, Formatting.Indented,
+            var objToJson = JsonConvert.SerializeObject(value, Formatting.Indented,
                                              new JsonSerializerSettings()
                                              {
                                                  TypeNameHandling = TypeNameHandling.Objects,
                                                  TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
                                                  PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                                                  ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-
                                              }
                                          );
-            bool v = await cache.StringSetAsync(key, json);
+            bool v = await cache.StringSetAsync(key, objToJson);
             return v;
         }
 
