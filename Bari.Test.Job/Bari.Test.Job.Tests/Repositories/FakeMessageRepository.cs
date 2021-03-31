@@ -8,9 +8,23 @@ namespace Bari.Test.Job.Tests.Repositories
 {
     public class FakeMessageRepository : IRepository<Message>
     {
+        private List<Message> _list;
+
+        public FakeMessageRepository()
+        {
+            _list = new List<Message>{
+                new Message("Leonardo","FakeMessageRepository"),
+                new Message("Arthur","FakeMessageRepository"),
+                new Message("Aidenir","FakeMessageRepository"),
+                new Message("Aldo","FakeMessageRepository")
+            };
+        }
         public Task Bind<Y>(Y entities, string named = null)
         {
-            throw new NotImplementedException();
+            if (named.Equals("Messages"))
+                _list = entities as List<Message>;
+
+            return Task.FromResult<bool>(true);
         }
 
         public Task<Message> Create(Message item)
@@ -40,14 +54,7 @@ namespace Bari.Test.Job.Tests.Repositories
 
         public Task<IEnumerable<Message>> GetAll()
         {
-            var list =  new List<Message>{
-                new Message("Leonardo","FakeMessageRepository"),
-                new Message("Arthur","FakeMessageRepository"),
-                new Message("Aidenir","FakeMessageRepository"),
-                new Message("Aldo","FakeMessageRepository")
-            };
-
-            return Task.FromResult<IEnumerable<Message>>(list);
+            return Task.FromResult<IEnumerable<Message>>(_list);
         }
     }
 }
