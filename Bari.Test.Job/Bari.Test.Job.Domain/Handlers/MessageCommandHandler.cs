@@ -5,24 +5,24 @@ using Bari.Test.Job.Domain.Repositories;
 using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace Bari.Test.Job.Domain.Handlers
 {
     public class MessageCommandHandler : Handler,
                                                 IRequestHandler<SendMessageCommand, ICommandResult>
     {
-        private readonly IEnumerable<IRepository<Message>> _repositories;
-        private readonly IRepository<Entity> _entityRepository;
+        private readonly IRepository<Message> _repository;
+        private readonly IRepository<Message> _cacheRepository;
         private readonly string _genericErrorText;
         private readonly string _genericSuccessText;
 
         public MessageCommandHandler(IEnumerable<IRepository<Message>> repositories, IRepository<Entity> entityRepository) : base(entityRepository)
         {
-            _repositories = repositories;
-            _entityRepository = entityRepository;
+            _repository = repositories.First();
+            _cacheRepository = repositories.ElementAt(1);
             _genericErrorText = "Ops, parece que os dados da mensagem estão errados!";
             _genericSuccessText = "Mensagem salva com sucesso!";
         }
@@ -35,44 +35,39 @@ namespace Bari.Test.Job.Domain.Handlers
 
         public async Task<ICommandResult> Handle(SendMessageCommand command, CancellationToken cancellationToken)
         {
-            //test command NULL
-            if (command == null)
-                return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, null));
+            try
+            {
+                if (command == null)
+                    return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, null));
 
-            //test a valid command
-            command.Validate();
-            if (command.Invalid)
-                return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, command.Notifications));
+                command.Validate();
+                if (command.Invalid)
+                    return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, command.Notifications));
 
-            //create object
-            var message = new Message(command.Body,command.ServiceId);
+                var message = new Message(command.Body, command.ServiceId);
 
-            //test business rules
-            message.Validate();
-            if (message.Invalid)
-                return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, "Regra de negócio inválida"));
+                message.Validate();
+                if (message.Invalid)
+                    return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText, "Regra de negócio inválida"));
 
-            //save in databases
-            await _repositories.First().Create(message);
-            await _repositories.ElementAt(1).Create(message);
+                await _repository.Create(message);
+                await _cacheRepository.Create(message);
 
-            List<Message> messagesCached = (List<Message>)await _repositories.ElementAt(1).GetAll();
+                List<Message> messagesCached = (List<Message>)await _cacheRepository.GetAll();
 
-            if (messagesCached == null || messagesCached.Count() == 0) messagesCached = new List<Message>() { message };
-            else messagesCached.Add(message);
+                messagesCached = InitializingCollection<Message>(message, messagesCached);
 
-            await _repositories.ElementAt(1).Bind<IEnumerable<Message>>(messagesCached, "Messages");
+                await _cacheRepository.Bind<IEnumerable<Message>>(messagesCached, "Messages");
 
+                INVALIDATE_ONE_CACHE = false;
+                INVALIDATE_ALL_CACHE = false;
 
-            //working with Redis as main storage at the moment
-            INVALIDATE_ONE_CACHE = false;
-            INVALIDATE_ALL_CACHE = false;
-            ////invalid cache to force update
-            //INVALIDATE_ONE_CACHE = true;
-            //INVALIDATE_ALL_CACHE = true;
-
-            //return generic result
-            return await Task.FromResult<ICommandResult>(new CommandResult(true, _genericSuccessText, message));
+                return await Task.FromResult<ICommandResult>(new CommandResult(true, _genericSuccessText, message));
+            }
+            catch (Exception ex)
+            {
+                return await Task.FromResult<ICommandResult>(new CommandResult(false, _genericErrorText + "|" + ex.Message + "|" + ex.StackTrace, null));
+            }
         }
     }
 }

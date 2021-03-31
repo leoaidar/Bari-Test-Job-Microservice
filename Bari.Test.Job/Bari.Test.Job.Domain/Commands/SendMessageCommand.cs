@@ -1,8 +1,7 @@
-using System;
+using Bari.Test.Job.Domain.Commands.Contracts;
 using Flunt.Notifications;
 using Flunt.Validations;
 using MediatR;
-using Bari.Test.Job.Domain.Commands.Contracts;
 
 namespace Bari.Test.Job.Domain.Commands
 {

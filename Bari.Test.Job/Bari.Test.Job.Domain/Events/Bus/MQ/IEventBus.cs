@@ -1,8 +1,5 @@
 ﻿using Bari.Test.Job.Domain.Events.Bus.MQ.Commands;
 using Bari.Test.Job.Domain.Events.Bus.MQ.Events;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Domain.Events.Bus.MQ
