@@ -16,6 +16,7 @@ namespace Bari.Test.Job.Tests.Repositories
                 new Message("Leonardo","FakeMessageRepository"),
                 new Message("Arthur","FakeMessageRepository"),
                 new Message("Aidenir","FakeMessageRepository"),
+                new Message("Selma","FakeMessageRepository"),
                 new Message("Aldo","FakeMessageRepository")
             };
         }
