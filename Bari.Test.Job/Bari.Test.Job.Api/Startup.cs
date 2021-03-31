@@ -53,12 +53,13 @@ namespace Bari.Test.Job.Api
             };
 
 
-            services.AddHealthChecksUI()
-                    .AddInMemoryStorage();
-            services
-                .AddHealthChecks()
-                .AddRedis(Configuration.GetConnectionString("RedisCacheConnection"), failureStatus: HealthStatus.Degraded)
-                .AddRabbitMQ(Configuration.GetConnectionString("RabbitMQConnection"), name: "rabbitmq", failureStatus: HealthStatus.Degraded);
+            //services.AddHealthChecksUI()
+            //        .AddInMemoryStorage();
+
+            //services
+            //    .AddHealthChecks()
+            //    .AddRedis(Configuration.GetConnectionString("RedisCacheConnection"), failureStatus: HealthStatus.Degraded)
+            //    .AddRabbitMQ(Configuration.GetConnectionString("RabbitMQConnection"), name: "rabbitmq", failureStatus: HealthStatus.Degraded);
             //.AddSqlServer(Configuration.GetConnectionString("GatewayTIMDbConnection"), failureStatus: HealthStatus.Degraded)
             //
 
@@ -98,7 +99,7 @@ namespace Bari.Test.Job.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -120,30 +121,31 @@ namespace Bari.Test.Job.Api
                 .AllowAnyHeader());
 
 
-            app.UseHealthChecks("/hc", new HealthCheckOptions
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
+            //app.UseHealthChecks("/hc", new HealthCheckOptions
+            //{
+            //    Predicate = _ => true,
+            //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            //});
 
             //nuget: AspNetCore.HealthChecks.UI
-            app.UseHealthChecksUI(options =>
-            {
-                options.UIPath = "/hc-ui";
-                options.ApiPath = "/hc-ui-api";
-            });
+            //app.UseHealthChecksUI(options =>
+            //{
+            //    options.UIPath = "/hc-ui";
+            //    options.ApiPath = "/hc-ui-api";
+            //});
 
             //app.UseAuthorization();
+
+            // Change `Back to site` link URL
+            var options = new DashboardOptions { AppPath = "https://localhost:5001" };
+            app.UseHangfireDashboard("/hangfire", options);
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHealthChecks("/hc");
-                //endpoints.MapHangfireDashboard();
+                //endpoints.MapHealthChecks("/hc");
+                endpoints.MapHangfireDashboard("/hangfire", options);
             });
-
-            //https://localhost:5001/hangfire
-            app.UseHangfireDashboard();
             recurringJobManager.AddOrUpdate("Run every 5 minutes", () => serviceProvider.GetService<IMessageJob>().SendMessage(), "*/5 * * * *");
 
             ConfigureEventBus(app);
