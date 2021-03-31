@@ -15,3 +15,26 @@ Dashboard Message Queue: http://localhost:15672/#/
 Dashboard Health Checks: https://localhost:5006/hc-ui#/healthchecks
 
 Dashboard Jobs: https://localhost:5006/hangfire
+
+Microservice Tecnologies and Software Engineering:
+
+.NET Core 3.1
+ASP.NET WebAPI
+DDD 
+CQRS
+SOLID
+Clean Code
+IoC
+Dependency Injection
+AutoMapper
+ViewModel
+TDD
+Unit Tests
+Multiple Repositories
+Docker
+
+Health Check 
+Background Job on Hangfire
+Message Queue BUS via AMQP Protocol on RabbitMQ 
+Persistence Cache NoSQL with Redis
+
