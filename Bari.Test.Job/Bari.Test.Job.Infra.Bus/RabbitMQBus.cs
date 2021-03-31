@@ -12,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace Bari.Test.Job.Infra.Bus
 {
     public sealed class RabbitMQBus : IEventBus
@@ -21,8 +20,8 @@ namespace Bari.Test.Job.Infra.Bus
         private readonly Dictionary<string, List<Type>> _handlers;
         private readonly List<Type> _eventTypes;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-
         private readonly AppConfiguration _appConfiguration;
+        private readonly string _hostname;
 
         public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
@@ -31,6 +30,7 @@ namespace Bari.Test.Job.Infra.Bus
             _handlers = new Dictionary<string, List<Type>>();
             _eventTypes = new List<Type>();
             _appConfiguration = new AppConfiguration();
+            _hostname = _appConfiguration.ConnectionString("RabbitMQHostname");
         }
 
         public Task SendCommand<T>(T command) where T : Command
@@ -40,8 +40,7 @@ namespace Bari.Test.Job.Infra.Bus
 
         public void Publish<T>(T @event) where T : Event
         {
-            var hostname = _appConfiguration.ConnectionString("RabbitMQHostname");
-            var factory = new ConnectionFactory() { HostName = hostname };
+            var factory = new ConnectionFactory() { HostName = _hostname };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -49,9 +48,6 @@ namespace Bari.Test.Job.Infra.Bus
 
                 channel.QueueDeclare(eventName, false, false, false, null);
 
-                //old using NewtonJson cause this had a bug JsonSerializer version doesnt support constructor with parameter yet :(
-                //{"Deserialization of reference types without parameterless constructor is not supported. Type 'Bari.Test.Job.Domain.Events.TransferCreatedEvent'"}
-                //var message = JsonSerializer.Serialize(@event);
                 var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
 
@@ -86,14 +82,11 @@ namespace Bari.Test.Job.Infra.Bus
             _handlers[eventName].Add(handlerType);
 
             StartBasicConsumer<T>();
-
-
         }
 
         private void StartBasicConsumer<T>() where T : Event
         {
-            var hostname = _appConfiguration.ConnectionString("RabbitMQHostname");
-            var factory = new ConnectionFactory() { HostName = hostname, DispatchConsumersAsync = true };
+            var factory = new ConnectionFactory() { HostName = _hostname, DispatchConsumersAsync = true };
             var connection = factory.CreateConnection();
             var channel = connection.CreateModel();
 
@@ -105,7 +98,6 @@ namespace Bari.Test.Job.Infra.Bus
             consumer.Received += Consumer_Received;
 
             channel.BasicConsume(eventName, true, consumer);
-
         }
 
         private async Task Consumer_Received(object sender, BasicDeliverEventArgs e)
@@ -118,7 +110,6 @@ namespace Bari.Test.Job.Infra.Bus
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -132,21 +123,14 @@ namespace Bari.Test.Job.Infra.Bus
                     var subscriptions = _handlers[eventName];
                     foreach (var subscription in subscriptions)
                     {
-                        //Before Refactor adding nuget Microsoft.DependencyInjection, IServiceScopeFactory, scope.ServiceProvider.GetService()
-                        //var handler = Activator.CreateInstance(subscription);
                         var handler = scope.ServiceProvider.GetService(subscription);
                         if (handler == null) continue;
                         var eventType = _eventTypes.SingleOrDefault(t => t.Name == eventName);
-                        //old using NewtonJson cause this had a bug JsonSerializer version doesnt support constructor with parameter yet :(
-                        //{"Deserialization of reference types without parameterless constructor is not supported. Type 'Bari.Test.Job.Domain.Events.TransferCreatedEvent'"}
-                        //var @event = JsonSerializer.Deserialize<eventType>(message, eventType);
                         var @event = JsonConvert.DeserializeObject(message, eventType);
                         var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
                         await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { @event });
-
                     }
                 }
-
             }
         }
     }

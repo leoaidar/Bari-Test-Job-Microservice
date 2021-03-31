@@ -22,10 +22,8 @@ namespace Bari.Test.Job.Infra.Data
         }
 
         public IConfigurationRoot AppSettings
-{
+        {
             get => _appSettings;
         }
-
-
     }
 }
