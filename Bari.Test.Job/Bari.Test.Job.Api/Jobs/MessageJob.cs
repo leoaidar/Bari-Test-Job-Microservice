@@ -1,6 +1,5 @@
 ﻿using Bari.Test.Job.Application.Interfaces;
 using Bari.Test.Job.Domain.Commands;
-using Bari.Test.Job.Domain.Events.Bus.MQ;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,13 +12,11 @@ namespace Bari.Test.Job.Api.Jobs
     {
         private readonly IMessageService _messageService;
         private readonly IConfiguration _config;
-        private readonly IEventBus _bus;
         private readonly ILogger<MessageJob> _logger;
 
-        public MessageJob(IMessageService messageService, IEventBus bus, IConfiguration config, ILogger<MessageJob> logger)
+        public MessageJob(IMessageService messageService, IConfiguration config, ILogger<MessageJob> logger)
         {
             _messageService = messageService;
-            _bus = bus;
             _config = config;
             _logger = logger;
         }

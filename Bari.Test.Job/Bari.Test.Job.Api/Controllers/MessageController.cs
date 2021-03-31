@@ -1,7 +1,6 @@
 using Bari.Test.Job.Application.Interfaces;
 using Bari.Test.Job.Application.ViewModels;
 using Bari.Test.Job.Domain.Commands;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
@@ -16,12 +15,10 @@ namespace Bari.Test.Job.Controllers
     [Route("v1/message")]
     public class MessageController : ControllerBase
     {        
-        private readonly IMediator _mediator;
         private readonly ILogger<MessageController> _logger;
 
-        public MessageController(IMediator mediator, ILogger<MessageController> logger)
+        public MessageController(ILogger<MessageController> logger)
         {
-            _mediator = mediator;
             _logger = logger;
         }
 
@@ -52,7 +49,6 @@ namespace Bari.Test.Job.Controllers
             [FromServices] IMessageService service
         )
         {
-
 
             try
             {
