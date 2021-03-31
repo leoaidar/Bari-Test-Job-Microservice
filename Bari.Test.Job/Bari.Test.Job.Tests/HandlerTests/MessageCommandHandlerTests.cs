@@ -4,9 +4,7 @@ using Bari.Test.Job.Domain.Handlers;
 using Bari.Test.Job.Domain.Repositories;
 using Bari.Test.Job.Tests.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Tests.HandlerTests
 {
@@ -21,7 +19,7 @@ namespace Bari.Test.Job.Tests.HandlerTests
 
         public SendMessageHandlerTests()
         {
-            _validCommand = new SendMessageCommand("Leonardo", "SendMessageHandlerTests"); ;
+            _validCommand = new SendMessageCommand("Leonardo Silva", "SendMessageHandlerTests"); ;
             _invalidCommand = new SendMessageCommand("", "");
             IRepository<Entity> repo = new EntityFakeRepository();
             var repositories = new List<IRepository<Message>>

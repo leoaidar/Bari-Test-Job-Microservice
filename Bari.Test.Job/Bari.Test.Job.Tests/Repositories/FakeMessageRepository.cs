@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Repositories;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Tests.Repositories
@@ -22,13 +21,10 @@ namespace Bari.Test.Job.Tests.Repositories
         public Task Delete(Guid id)
         {
             return Task.FromResult<bool>(true);
-            //throw new NotImplementedException();
         }
 
         public Task<Message> Get(Guid id)
         {
-            //throw new NotImplementedException();
-
             return Task.FromResult<Message>(new Message("GetMethod", "Task<Message> Get(Guid id)"));
         }
 
@@ -48,7 +44,7 @@ namespace Bari.Test.Job.Tests.Repositories
                 new Message("Leonardo","FakeMessageRepository"),
                 new Message("Arthur","FakeMessageRepository"),
                 new Message("Aidenir","FakeMessageRepository"),
-                new Message("Ana Paula","FakeMessageRepository")
+                new Message("Aldo","FakeMessageRepository")
             };
 
             return Task.FromResult<IEnumerable<Message>>(list);
