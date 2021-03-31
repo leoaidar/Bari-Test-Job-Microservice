@@ -19,7 +19,7 @@ Dashboard Jobs: https://localhost:5006/hangfire
 Microservice Tecnologies and Software Engineering:
 
 .NET Core 3.1
-ASP.NET WebAPI
+ASP.NET WebAPI 
 DDD 
 CQRS
 SOLID
