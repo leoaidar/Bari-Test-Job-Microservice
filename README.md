@@ -51,11 +51,11 @@ Persistence Cache NoSQL with Redis
 
 ***INSTRUÇÕES
 
-A Branch master está preparada  pra funcionar no container docker comando: docker-composer up --build
+A Branch master está preparada  pra funcionar no container pelo Docker com o comando: docker-composer up --build
 
-A Branch develop está preparada pra funcionar rodando pelo visual studio ou vscode: 
+A Branch develop está preparada pra funcionar rodando pelo Visual studio ou VScode: 
 
-Para subir as duas instancias basta levantar pelo Docker a branch master e levantar pelo Visual Studio a branch develop.
+Para subir as duas instancias basta levantar pelo Docker pela branch master e levantar pelo Visual Studio a branch develop.
 
 As duas instancias vao compartilhar os mesmos recursos e irão se comunicar atraves de mensageria.
 
