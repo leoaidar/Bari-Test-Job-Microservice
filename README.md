@@ -59,3 +59,5 @@ Para subir as duas instancias basta levantar pelo Docker pela branch master e l
 
 As duas instancias vao compartilhar os mesmos recursos e irão se comunicar atraves de mensageria.
 
+Acima coloquei os links de acesso de cada instancia, após levantar as instancias basta clicar aqui nos links citados.
+
