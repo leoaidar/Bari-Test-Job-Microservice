@@ -69,7 +69,6 @@ namespace Bari.Test.Job.Api
             DependencyContainer.RegisterServices(services);
 
             services.AddSingleton<IMessageJob, MessageJob>();
-            services.AddTransient<MessageEventHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobClient, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
