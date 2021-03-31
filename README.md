@@ -6,7 +6,7 @@ Branch develop to run on Visual Studio or VSCode.
 
 Links:
 
-View messages GET /v1/message: https://localhost:5001/swagger/index.html
+Dashboard View messages GET /v1/message: https://localhost:5001/swagger/index.html
 
-Message Queue: http://localhost:15672/#/
+Dashboard Message Queue: http://localhost:15672/#/
 
