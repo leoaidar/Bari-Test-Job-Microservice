@@ -1,12 +1,8 @@
-﻿
+﻿using Bari.Test.Job.Domain.Entities;
+using Bari.Test.Job.Domain.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-//using Microsoft.EntityFrameworkCore;
-//using Bari.Test.Job.Infra.Data.Contexts;
-using Bari.Test.Job.Domain.Entities;
-using Bari.Test.Job.Domain.Repositories;
-using Bari.Test.Job.Domain.Queries;
 using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Infra.Data.Repositories
@@ -15,11 +11,7 @@ namespace Bari.Test.Job.Infra.Data.Repositories
     {
         public static Dictionary<int, Message> messages = new Dictionary<int, Message>();
 
-        public MessageRepository()
-        {
-            //messages.Add(messages.Count() + 1, new Message("Léo" + messages.Count() + 1, "M"));
-            //messages.Add(messages.Count() + 1, new Message("Jamiles" + messages.Count() + 1, "F"));
-        }
+        public MessageRepository() { }
 
         public async Task<IEnumerable<Message>> GetAll()
         {

@@ -5,12 +5,9 @@ using Bari.Test.Job.Domain.Commands;
 using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Events;
 using Bari.Test.Job.Domain.Events.Bus.MQ;
-using Bari.Test.Job.Domain.Handlers;
 using Bari.Test.Job.Domain.Queries;
-using Bari.Test.Job.Domain.Repositories;
 using MediatR;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -19,7 +16,6 @@ namespace Bari.Test.Job.Application.Services
     public class MessageService : IMessageService
     {
         private readonly IMediator _mediator;
-        private readonly IRepository<Message> _messageRepository;
         private readonly IEventBus _bus;
         private readonly IMapper _mapper;
 
@@ -52,7 +48,6 @@ namespace Bari.Test.Job.Application.Services
 
             handler.Data = viewModel;
 
-            // publish event ot RabbitMQ
             _bus.Publish(messageEvent);
 
             return handler;

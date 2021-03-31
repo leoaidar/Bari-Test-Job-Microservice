@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using StackExchange.Redis;
-using Newtonsoft.Json;
+﻿using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Repositories;
-using Bari.Test.Job.Domain.Entities;
-using System.Threading.Tasks;
 using Bari.Test.Job.Infra.Data.Cache;
+using StackExchange.Redis;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Infra.Data.Repositories
 {

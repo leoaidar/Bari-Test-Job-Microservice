@@ -24,42 +24,30 @@ namespace Bari.Test.Job.Infra.IoC
     {
         public static void RegisterServices(IServiceCollection services)
         {
-
-            //SQL Server
-            //services.AddDbContext<MessagesDbContext>(options =>
-            //        options.UseSqlServer(new AppConfiguration().ConnectionString("MessagesDbConnection")));
-
-
             //Redis Cache
             services.AddSingleton<IRedisConnectionFactory, RedisConnectionFactory>();
             services.AddSingleton<IDatabase>(c => new RedisConnectionFactory().Connection().GetDatabase());
 
-            //////Application Services
+            //Application Services
             services.AddTransient<IMessageService, MessageService>();
 
             //Handlers
-            //Handlers queries
-            services.AddTransient<IRequestHandler<MessageGetAllQuery, IQueryResult>, MessageQueryHandler>();
-            //var options = new DbContextOptions<MessagesDbContext>();
             var repositories = new List<IRepository<Message>>
             {
-                //new MessageRepository(new MessagesDbContext(options)),
                 new MessageRepository(),
                 new MessageCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())
             };
+            //Handlers queries            
             services.AddTransient(c => new MessageQueryHandler(repositories, new EntityCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())));
+            services.AddTransient<IRequestHandler<MessageGetAllQuery, IQueryResult>, MessageQueryHandler>();
             //Handlers commands
-            //services.AddTransient<MessageCommandHandler, MessageCommandHandler>();
             services.AddTransient(c => new MessageCommandHandler(repositories, new EntityCacheRepository(new RedisConnectionFactory().Connection().GetDatabase())));
             services.AddTransient<IRequestHandler<SendMessageCommand, ICommandResult>, MessageCommandHandler>();
             //Handlers events
-            //services.AddTransient<MessageEventHandler, MessageEventHandler>();
-            //services.AddTransient<IRequestHandler<MessageCreatedEvent, IEventResult>, MessageEventHandler>();
-
+            services.AddTransient<MessageEventHandler>();
 
             //Repositories
             //Repositories Data
-            //services.AddTransient<MessageRepository>();
             services.AddSingleton<IRepository<Message>, MessageRepository>();
             //Repositories cache
             services.AddSingleton<IRepository<Message>, MessageCacheRepository>();
@@ -73,18 +61,12 @@ namespace Bari.Test.Job.Infra.IoC
             services.AddAutoMapper(typeof(AutoMapping));
 
             //Domain Bus MQ
-            //Before Refactor adding nuget Microsoft.DependencyInjection, IServiceScopeFactory in RabbitMQBus;
             services.AddTransient<IEventBus, RabbitMQBus>();
             services.AddSingleton<IEventBus, RabbitMQBus>(sp =>
             {
                 var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
                 return new RabbitMQBus(sp.GetService<IMediator>(), scopeFactory);
-
             });
-
-            //Jobs
-            //services.AddSingleton<IMessageJob, MessageJob>();
-
         }
     }
 }

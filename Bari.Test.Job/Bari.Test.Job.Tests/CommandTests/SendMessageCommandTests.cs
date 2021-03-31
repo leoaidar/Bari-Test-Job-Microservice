@@ -1,6 +1,5 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bari.Test.Job.Domain.Commands;
-using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Bari.Test.Job.Tests.Commands
 {
@@ -12,7 +11,7 @@ namespace Bari.Test.Job.Tests.Commands
 
         public SendMessageCommandTests()
         {
-            _validCommand = new SendMessageCommand("Leonardo", "SendMessageCommandTests");
+            _validCommand = new SendMessageCommand("Leonardo Silva", "SendMessageCommandTests");
             _invalidCommand = new SendMessageCommand("", "");
         }
 

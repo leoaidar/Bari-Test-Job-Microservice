@@ -1,8 +1,7 @@
-using System;
-using System.Collections.Generic;
 using Bari.Test.Job.Domain.Entities;
 using Bari.Test.Job.Domain.Repositories;
-using System.Linq;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bari.Test.Job.Tests.Repositories

@@ -6,11 +6,6 @@ namespace Bari.Test.Job.Domain.Events.Bus.MQ.Events
     {
         public string MessageType { get; protected set; }
 
-        //protected Message()
-        //{
-        //    MessageType = GetType().Name;
-        //}
-
         protected MessageEvent() => MessageType = GetType().Name;
     }
 }

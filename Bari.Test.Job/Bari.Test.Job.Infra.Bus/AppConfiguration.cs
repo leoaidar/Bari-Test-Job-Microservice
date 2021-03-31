@@ -23,10 +23,8 @@ namespace Bari.Test.Job.Infra.Bus
         }
 
         public IConfigurationRoot AppSettings
-{
+        {
             get => _appSettings;
         }
-
-
     }
 }

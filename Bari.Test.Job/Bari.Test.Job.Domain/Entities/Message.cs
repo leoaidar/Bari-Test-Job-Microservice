@@ -4,10 +4,8 @@ namespace Bari.Test.Job.Domain.Entities
 {
     public class Message : Entity
     {
-        public Message()
-        {
+        public Message() { }
 
-        }
         public Message(string body, string serviceId) : base()
         {
             Body = body;
