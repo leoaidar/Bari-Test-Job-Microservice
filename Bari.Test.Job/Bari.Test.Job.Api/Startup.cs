@@ -5,11 +5,14 @@ using Bari.Test.Job.Domain.Handlers;
 using Bari.Test.Job.Infra.IoC;
 using Hangfire;
 using Hangfire.MemoryStorage;
+using HealthChecks.UI.Client;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using RabbitMQ.Client;
@@ -29,7 +32,6 @@ namespace Bari.Test.Job.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers().AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
@@ -41,6 +43,14 @@ namespace Bari.Test.Job.Api
                 Uri = new Uri(connRabbit),
                 AutomaticRecoveryEnabled = true
             };
+
+            services.AddHealthChecksUI()
+                    .AddInMemoryStorage();
+
+            services
+                .AddHealthChecks()
+                .AddRedis(Configuration.GetConnectionString("RedisCacheConnection"), failureStatus: HealthStatus.Degraded)
+                .AddRabbitMQ(Configuration.GetConnectionString("RabbitMQConnection"), name: "rabbitmq", failureStatus: HealthStatus.Degraded);
 
             services.AddSwaggerGen(c =>
             {
@@ -65,7 +75,6 @@ namespace Bari.Test.Job.Api
 
         private void RegisterServices(IServiceCollection services)
         {
-
             DependencyContainer.RegisterServices(services);
 
             services.AddSingleton<IMessageJob, MessageJob>();
@@ -92,6 +101,17 @@ namespace Bari.Test.Job.Api
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
+            app.UseHealthChecks("/hc", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
+
+            app.UseHealthChecksUI(options =>
+            {
+                options.UIPath = "/hc-ui";
+                options.ApiPath = "/hc-ui-api";
+            });
 
             var options = new DashboardOptions { AppPath = "https://localhost:5001" };
             app.UseHangfireDashboard("/hangfire", options);
@@ -100,7 +120,9 @@ namespace Bari.Test.Job.Api
             {
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard("/hangfire", options);
+                endpoints.MapHealthChecks("/hc");
             });
+
             recurringJobManager.AddOrUpdate("Run every 5 minutes", () => serviceProvider.GetService<IMessageJob>().SendMessage(), "*/5 * * * *");
 
             ConfigureEventBus(app);
